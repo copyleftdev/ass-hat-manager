@@ -17,19 +17,22 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
-        cache: 'npm'
         
     - name: Install dependencies
       working-directory: ./api-test-harness
       run: |
-        # Install dependencies with or without package-lock.json
-        if [ -f package-lock.json ]; then
-          npm ci
-        else
-          npm install
+        # Create package.json if it doesn't exist
+        if [ ! -f package.json ]; then
+          echo '{"name": "api-test-harness", "version": "1.0.0"}' > package.json
         fi
-        # Install additional required packages
-        npm install @redocly/cli mocha mochawesome --save-dev
+        
+        # Install dependencies
+        npm install
+        
+        # Install test dependencies
+        npm install --save-dev @redocly/cli mocha mochawesome
+        
+        # List installed packages
         npm list
       
     - name: Run OpenAPI validation
