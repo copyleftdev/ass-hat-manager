@@ -1,0 +1,53 @@
+{
+  "name": "api-test-harness",
+  "version": "1.0.0",
+  "description": "Test harness for validating the Asset Management API against OpenAPI specification",
+  "main": "index.js",
+  "scripts": {
+    "test": "NODE_ENV=test mocha",
+    "test:validation": "NODE_ENV=test mocha test/validation/*.test.js",
+    "test:endpoints": "NODE_ENV=test mocha test/validation/endpoint.validation.test.js",
+    "test:schema": "NODE_ENV=test mocha test/validation/schema.test.js",
+    "test:contract": "NODE_ENV=test mocha test/contract/contract.test.js",
+    "test:integration": "NODE_ENV=test mocha test/integration/*.test.js",
+    "test:all": "npm run test:validation && npm run test:endpoints && npm run test:contract && npm run test:integration",
+    "test:watch": "NODE_ENV=test mocha --watch",
+    "test:coverage": "NODE_ENV=test nyc --reporter=html --reporter=text mocha",
+    "test:generate-data": "node scripts/generate-test-data.js",
+    "lint": "eslint . --ext .js",
+    "format": "prettier --write \"**/*.{js,json,md,yaml,yml}\"",
+    "ci:test": "npm run test:all"
+  },
+  "keywords": [
+    "api",
+    "testing",
+    "openapi",
+    "validation",
+    "contract-testing"
+  ],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "@apideck/better-ajv-errors": "^0.3.6",
+    "@faker-js/faker": "^9.8.0",
+    "@stoplight/prism-http": "^4.13.0",
+    "ajv": "^8.17.1",
+    "ajv-cli": "^5.0.0",
+    "ajv-formats": "^3.0.1",
+    "chai": "^5.2.0",
+    "chai-http": "^5.1.2",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-mocha": "^10.2.0",
+    "mocha": "^11.5.0",
+    "mocha-junit-reporter": "^2.2.1",
+    "mochawesome": "^7.1.3",
+    "newman": "^6.2.1",
+    "nyc": "^17.1.0",
+    "prettier": "^3.2.4",
+    "supertest": "^7.1.1",
+    "swagger-parser": "^10.0.3",
+    "yaml": "^2.3.4"
+  }
+}

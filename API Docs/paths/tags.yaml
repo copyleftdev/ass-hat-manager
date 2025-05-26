@@ -1,0 +1,79 @@
+# Tags API Paths
+
+# List all tags
+/tags:
+  get:
+    tags:
+      - Tags
+    summary: List all tags
+    description: Returns a paginated list of tags. You can filter, sort, and paginate the results.
+    parameters:
+      - $ref: '../../components/parameters/_index.yaml#/page'
+      - $ref: '../../components/parameters/_index.yaml#/limit'
+      - $ref: '../../components/parameters/_index.yaml#/sort'
+      - $ref: '../../components/parameters/_index.yaml#/fields'
+      - name: name
+        in: query
+        description: Filter tags by name (case-insensitive partial match)
+        required: false
+        schema:
+          type: string
+        example: "marketing"
+    responses:
+      '200':
+        description: A paginated list of tags
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/tag.yaml#/Tag'
+                pagination:
+                  $ref: '#/components/schemas/Pagination'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  post:
+    tags:
+      - Tags
+    summary: Create a new tag
+    description: Create a new tag with the provided details. Returns the created tag.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/tag.yaml#/TagInput'
+          example:
+            name: "marketing"
+            description: "Assets used for marketing campaigns"
+            color: "#FF5733"
+    responses:
+      '201':
+        description: Tag created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/tag.yaml#/Tag'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'

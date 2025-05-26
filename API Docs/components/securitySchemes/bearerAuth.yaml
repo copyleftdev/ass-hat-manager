@@ -1,0 +1,8 @@
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+    description: >-
+      JWT Authorization header using the Bearer scheme.
+      \n**Example:** `Bearer {token}`

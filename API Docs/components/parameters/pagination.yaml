@@ -1,0 +1,41 @@
+# Pagination parameters for list endpoints
+page:
+  name: page
+  in: query
+  description: Page number for pagination (1-based)
+  required: false
+  schema:
+    type: integer
+    minimum: 1
+    default: 1
+  example: 1
+
+limit:
+  name: limit
+  in: query
+  description: Number of items per page (max 100)
+  required: false
+  schema:
+    type: integer
+    minimum: 1
+    maximum: 100
+    default: 20
+  example: 20
+
+sort:
+  name: sort
+  in: query
+  description: Field to sort by (prefix with - for descending order)
+  required: false
+  schema:
+    type: string
+  example: "-createdAt"
+
+fields:
+  name: fields
+  in: query
+  description: Comma-separated list of fields to include in the response
+  required: false
+  schema:
+    type: string
+  example: "id,name,status,createdAt"

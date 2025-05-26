@@ -1,0 +1,21 @@
+# Common parameters for endpoints that require an asset ID
+assetIdPath:
+  name: assetId
+  in: path
+  required: true
+  description: Unique identifier of the asset
+  schema:
+    type: string
+    format: uuid
+  example: "123e4567-e89b-12d3-a456-426614174000"
+
+# Query parameter for filtering by asset ID
+assetIdQuery:
+  name: assetId
+  in: query
+  description: Filter by asset ID
+  required: false
+  schema:
+    type: string
+    format: uuid
+  example: "123e4567-e89b-12d3-a456-426614174000"

@@ -1,0 +1,80 @@
+openapi: 3.1.0
+info:
+  title: Asset Management API
+  description: |
+    Comprehensive API for managing digital assets, tags, releases, and NFTs.
+    This API follows RESTful principles and adheres to OpenAPI 3.1.0 specification.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@assetmanagement.com
+    url: https://developer.assetmanagement.com/support
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  x-api-version-policy:
+    current: "1.0.0"
+    minSupported: "1.0.0"
+    deprecationPolicy: |
+      - API versions are supported for at least 12 months after the release of a subsequent version.
+      - Deprecated endpoints will be marked with a `Deprecation` header and a `Sunset` header indicating removal date.
+      - Breaking changes will only be introduced in major version updates.
+  x-rate-limits:
+    - name: standard
+      limit: 1000
+      period: 1m
+      scope: user
+    - name: burst
+      limit: 100
+      period: 10s
+      scope: user
+
+servers:
+  - url: https://api.assetmanagement.com/v1
+    description: Production API (v1)
+    variables:
+      version:
+        enum: [v1]
+        default: v1
+  - url: https://staging-api.assetmanagement.com/v1
+    description: Staging API for testing (v1)
+    variables:
+      version:
+        enum: [v1]
+        default: v1
+  - url: https://{environment}.api.assetmanagement.com/v1
+    description: Environment-specific API
+    variables:
+      environment:
+        enum: [staging, sandbox, dev]
+        default: staging
+        description: Environment name (staging, sandbox, dev)
+
+security:
+  - bearerAuth: []
+
+paths:
+  /assets:
+    $ref: './paths/assets.yaml#/assets'
+  /assets/{assetId}:
+    $ref: './paths/assets.yaml#/assetById'
+  /tags:
+    $ref: './paths/tags.yaml#/tags'
+  /releases:
+    $ref: './paths/releases.yaml#/releases'
+  /releases/{releaseId}:
+    $ref: './paths/releases.yaml#/releaseById'
+  /nfts:
+    $ref: './paths/nfts.yaml#/nfts'
+  /nfts/{nftId}:
+    $ref: './paths/nfts.yaml#/nftById'
+
+components:
+  securitySchemes:
+    $ref: './components/securitySchemes/bearerAuth.yaml#/securitySchemes'
+  schemas:
+    $ref: './components/schemas/_index.yaml'
+  parameters:
+    $ref: './components/parameters/_index.yaml'
+  responses:
+    $ref: './components/responses/_index.yaml'

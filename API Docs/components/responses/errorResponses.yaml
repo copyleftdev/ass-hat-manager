@@ -1,0 +1,138 @@
+# Standard error response format
+errorResponse:
+  description: Unexpected error
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          error:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Machine-readable error code
+                example: "VALIDATION_ERROR"
+              message:
+                type: string
+                description: Human-readable error message
+                example: "Validation failed: Name is required"
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    field:
+                      type: string
+                      description: The field that failed validation
+                      example: "name"
+                    message:
+                      type: string
+                      description: Description of the validation error
+                      example: "Name is required"
+                description: Detailed validation errors (if applicable)
+              timestamp:
+                type: string
+                format: date-time
+                description: When the error occurred
+                example: "2023-01-01T12:00:00Z"
+              requestId:
+                type: string
+                description: Unique identifier for the request
+                example: "req_1234567890"
+
+# Common error responses
+badRequest:
+  description: Bad Request - The request was invalid or cannot be otherwise served
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "VALIDATION_ERROR"
+          message: "Invalid input data"
+          details:
+            - field: "name"
+              message: "Name is required"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567890"
+
+unauthorized:
+  description: Unauthorized - Authentication failed or user doesn't have permissions
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "UNAUTHORIZED"
+          message: "Authentication credentials were missing or incorrect"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567891"
+
+forbidden:
+  description: Forbidden - The request is understood, but it has been refused or access is not allowed
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "FORBIDDEN"
+          message: "You don't have permission to access this resource"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567892"
+
+notFound:
+  description: Not Found - The requested resource doesn't exist
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "RESOURCE_NOT_FOUND"
+          message: "The requested resource was not found"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567893"
+
+conflict:
+  description: Conflict - The request conflicts with the current state of the server
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "RESOURCE_EXISTS"
+          message: "A resource with this identifier already exists"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567894"
+
+tooManyRequests:
+  description: Too Many Requests - Rate limit exceeded
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "RATE_LIMIT_EXCEEDED"
+          message: "API rate limit exceeded"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567895"
+          retryAfter: 60
+
+serverError:
+  description: Internal Server Error - Something went wrong on our end
+  content:
+    application/json:
+      schema:
+        $ref: '#/components/schemas/errorResponse'
+      example:
+        error:
+          code: "INTERNAL_SERVER_ERROR"
+          message: "An unexpected error occurred"
+          timestamp: "2023-01-01T12:00:00Z"
+          requestId: "req_1234567896"

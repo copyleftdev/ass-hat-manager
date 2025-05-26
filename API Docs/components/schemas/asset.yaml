@@ -1,0 +1,95 @@
+Asset:
+  type: object
+  required:
+    - id
+    - name
+    - type
+    - status
+    - createdAt
+    - updatedAt
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier for the asset
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    name:
+      type: string
+      description: Display name of the asset
+      example: "Summer Collection Banner"
+    description:
+      type: string
+      description: Detailed description of the asset
+      example: "Main banner for the summer collection campaign"
+    type:
+      type: string
+      enum: [image, video, document, audio, other]
+      description: Type of the asset
+      example: "image"
+    fileUrl:
+      type: string
+      format: uri
+      description: URL to access the asset file
+      example: "https://storage.assetmanagement.com/assets/123e4567-e89b-12d3-a456-426614174000.jpg"
+    fileSize:
+      type: integer
+      format: int64
+      description: Size of the file in bytes
+      example: 1024000
+    mimeType:
+      type: string
+      description: MIME type of the asset
+      example: "image/jpeg"
+    status:
+      type: string
+      enum: [draft, published, archived]
+      description: Current status of the asset
+      example: "published"
+    tags:
+      type: array
+      items:
+        $ref: "#/components/schemas/Tag"
+      description: List of tags associated with the asset
+    metadata:
+      type: object
+      additionalProperties: true
+      description: Additional metadata for the asset
+      example: {"width": 1200, "height": 630, "duration": null}
+    createdAt:
+      type: string
+      format: date-time
+      description: Timestamp when the asset was created
+      example: "2023-01-01T12:00:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Timestamp when the asset was last updated
+      example: "2023-01-02T09:30:00Z"
+    createdBy:
+      type: string
+      format: uuid
+      description: ID of the user who created the asset
+      example: "550e8400-e29b-41d4-a716-446655440000"
+
+AssetInput:
+  type: object
+  required:
+    - name
+    - type
+  properties:
+    name:
+      $ref: "#/components/schemas/Asset/properties/name"
+    description:
+      $ref: "#/components/schemas/Asset/properties/description"
+    type:
+      $ref: "#/components/schemas/Asset/properties/type"
+    status:
+      $ref: "#/components/schemas/Asset/properties/status"
+    tags:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of tag IDs to associate with the asset
+    metadata:
+      $ref: "#/components/schemas/Asset/properties/metadata"

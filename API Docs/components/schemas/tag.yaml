@@ -1,0 +1,52 @@
+Tag:
+  type: object
+  required:
+    - id
+    - name
+    - createdAt
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier for the tag
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    name:
+      type: string
+      description: Display name of the tag
+      example: "marketing"
+    description:
+      type: string
+      description: Detailed description of the tag
+      example: "Assets used for marketing campaigns"
+    color:
+      type: string
+      format: hexcolor
+      description: Color code for the tag (in hex format)
+      example: "#FF5733"
+    createdAt:
+      type: string
+      format: date-time
+      description: Timestamp when the tag was created
+      example: "2023-01-01T12:00:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Timestamp when the tag was last updated
+      example: "2023-01-02T09:30:00Z"
+    createdBy:
+      type: string
+      format: uuid
+      description: ID of the user who created the tag
+      example: "550e8400-e29b-41d4-a716-446655440000"
+
+TagInput:
+  type: object
+  required:
+    - name
+  properties:
+    name:
+      $ref: "#/components/schemas/Tag/properties/name"
+    description:
+      $ref: "#/components/schemas/Tag/properties/description"
+    color:
+      $ref: "#/components/schemas/Tag/properties/color"

@@ -1,0 +1,195 @@
+# Releases API Paths
+
+# List all releases
+/releases:
+  get:
+    tags:
+      - Releases
+    summary: List all releases
+    description: Returns a paginated list of releases. You can filter, sort, and paginate the results.
+    parameters:
+      - $ref: '../../components/parameters/_index.yaml#/page'
+      - $ref: '../../components/parameters/_index.yaml#/limit'
+      - $ref: '../../components/parameters/_index.yaml#/sort'
+      - $ref: '../../components/parameters/_index.yaml#/fields'
+      - name: status
+        in: query
+        description: Filter releases by status
+        required: false
+        schema:
+          type: string
+          enum: [planned, in_progress, released, cancelled]
+        example: "released"
+      - name: startDate
+        in: query
+        description: Filter releases with release date on or after this date (YYYY-MM-DD)
+        required: false
+        schema:
+          type: string
+          format: date
+        example: "2023-01-01"
+      - name: endDate
+        in: query
+        description: Filter releases with release date on or before this date (YYYY-MM-DD)
+        required: false
+        schema:
+          type: string
+          format: date
+        example: "2023-12-31"
+    responses:
+      '200':
+        description: A paginated list of releases
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/release.yaml#/Release'
+                pagination:
+                  $ref: '#/components/schemas/Pagination'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  post:
+    tags:
+      - Releases
+    summary: Create a new release
+    description: Create a new release with the provided details. Returns the created release.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/release.yaml#/ReleaseInput'
+          example:
+            name: "Q2 2023 Product Launch"
+            description: "Major product launch including new features and improvements"
+            status: "planned"
+            releaseDate: "2023-06-15"
+            assetIds: ["123e4567-e89b-12d3-a456-426614174000"]
+            notes: "This release includes major UI updates and performance improvements."
+    responses:
+      '201':
+        description: Release created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/release.yaml#/Release'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+
+# Operations on a specific release
+/releases/{releaseId}:
+  parameters:
+    - name: releaseId
+      in: path
+      required: true
+      description: Unique identifier of the release
+      schema:
+        type: string
+        format: uuid
+      example: "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+  
+  get:
+    tags:
+      - Releases
+    summary: Get release by ID
+    description: Returns the release with the specified ID, including its associated assets.
+    responses:
+      '200':
+        description: Release details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/release.yaml#/Release'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  put:
+    tags:
+      - Releases
+    summary: Update a release
+    description: Update an existing release with the provided details. Returns the updated release.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/release.yaml#/ReleaseInput'
+          example:
+            name: "Q2 2023 Product Launch - Updated"
+            status: "in_progress"
+            releaseDate: "2023-06-20"
+            notes: "Updated release date and status."
+    responses:
+      '200':
+        description: Release updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/release.yaml#/Release'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  delete:
+    tags:
+      - Releases
+    summary: Delete a release
+    description: Delete the release with the specified ID. This action cannot be undone.
+    responses:
+      '204':
+        description: Release deleted successfully
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'

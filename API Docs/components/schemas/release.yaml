@@ -1,0 +1,79 @@
+Release:
+  type: object
+  required:
+    - id
+    - name
+    - status
+    - releaseDate
+    - createdAt
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier for the release
+      example: "6ba7b810-9dad-11d1-80b4-00c04fd430c8"
+    name:
+      type: string
+      description: Name of the release
+      example: "Q2 2023 Product Launch"
+    description:
+      type: string
+      description: Detailed description of the release
+      example: "Major product launch including new features and improvements"
+    status:
+      type: string
+      enum: [planned, in_progress, released, cancelled]
+      description: Current status of the release
+      example: "released"
+    releaseDate:
+      type: string
+      format: date
+      description: Scheduled or actual release date
+      example: "2023-06-15"
+    assets:
+      type: array
+      items:
+        $ref: "#/components/schemas/Asset"
+      description: List of assets included in this release
+    notes:
+      type: string
+      description: Release notes or additional information
+      example: "This release includes major UI updates and performance improvements."
+    createdAt:
+      type: string
+      format: date-time
+      description: Timestamp when the release was created
+      example: "2023-01-15T10:30:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Timestamp when the release was last updated
+      example: "2023-06-10T14:22:00Z"
+    createdBy:
+      type: string
+      format: uuid
+      description: ID of the user who created the release
+      example: "550e8400-e29b-41d4-a716-446655440000"
+
+ReleaseInput:
+  type: object
+  required:
+    - name
+    - releaseDate
+  properties:
+    name:
+      $ref: "#/components/schemas/Release/properties/name"
+    description:
+      $ref: "#/components/schemas/Release/properties/description"
+    status:
+      $ref: "#/components/schemas/Release/properties/status"
+    releaseDate:
+      $ref: "#/components/schemas/Release/properties/releaseDate"
+    assetIds:
+      type: array
+      items:
+        type: string
+        format: uuid
+      description: List of asset IDs to include in this release
+    notes:
+      $ref: "#/components/schemas/Release/properties/notes"

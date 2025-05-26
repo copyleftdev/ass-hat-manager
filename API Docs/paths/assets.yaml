@@ -1,0 +1,455 @@
+# Assets API Paths
+
+# List all assets
+/assets:
+  get:
+    tags:
+      - Assets
+    summary: List all assets
+    description: Returns a paginated list of assets. You can filter, sort, and paginate the results.
+    parameters:
+      - $ref: '../../components/parameters/_index.yaml#/page'
+      - $ref: '../../components/parameters/_index.yaml#/limit'
+      - $ref: '../../components/parameters/_index.yaml#/sort'
+      - $ref: '../../components/parameters/_index.yaml#/fields'
+      - name: q
+        in: query
+        description: Full-text search across name and description
+        required: false
+        schema:
+          type: string
+        example: "summer campaign"
+      - name: name
+        in: query
+        description: Filter assets by name (case-insensitive partial match)
+        required: false
+        schema:
+          type: string
+        example: "banner"
+      - name: type
+        in: query
+        description: Filter assets by type (can be used multiple times for OR logic)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum: [image, video, document, audio, other]
+        style: form
+        explode: false
+        example: ["image", "video"]
+      - name: status
+        in: query
+        description: Filter assets by status (can be used multiple times for OR logic)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            enum: [draft, published, archived]
+        style: form
+        explode: false
+        example: ["published"]
+      - name: tag
+        in: query
+        description: Filter assets by tag ID (can be used multiple times for AND logic)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+            format: uuid
+        style: form
+        explode: false
+        example: ["550e8400-e29b-41d4-a716-446655440000"]
+      - name: createdAfter
+        in: query
+        description: Filter assets created after this timestamp (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: "2023-01-01T00:00:00Z"
+      - name: createdBefore
+        in: query
+        description: Filter assets created before this timestamp (ISO 8601 format)
+        required: false
+        schema:
+          type: string
+          format: date-time
+        example: "2023-12-31T23:59:59Z"
+      - name: fileSizeMin
+        in: query
+        description: Minimum file size in bytes
+        required: false
+        schema:
+          type: integer
+          minimum: 0
+        example: 1024
+      - name: fileSizeMax
+        in: query
+        description: Maximum file size in bytes
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+        example: 10485760
+      - name: mimeType
+        in: query
+        description: Filter by MIME type (can be used multiple times for OR logic)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+        example: ["image/jpeg", "image/png"]
+      - name: metadata
+        in: query
+        description: >-
+          Filter by metadata key-value pairs (format: key:value)
+        required: false
+        schema:
+          type: array
+          items:
+            type: string
+        style: form
+        explode: false
+        example: ["width:1920", "orientation:landscape"]
+    responses:
+      '200':
+        $ref: '../../components/responses/_index.yaml#/assetListResponse'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  post:
+    tags:
+      - Assets
+    summary: Create a new asset
+    description: Create a new asset with the provided details. Returns the created asset.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/asset.yaml#/AssetInput'
+          example:
+            name: "New Product Launch Banner"
+            description: "Banner for the upcoming product launch"
+            type: "image"
+            status: "draft"
+            tags: ["550e8400-e29b-41d4-a716-446655440000"]
+            metadata:
+              width: 1200
+              height: 630
+    responses:
+      '201':
+        $ref: '../../components/responses/_index.yaml#/assetCreatedResponse'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+
+# Operations on a specific asset
+/asset/{assetId}:
+  parameters:
+    - $ref: '../../components/parameters/_index.yaml#/assetIdPath'
+  
+  get:
+    tags:
+      - Assets
+    summary: Get asset by ID
+    description: Returns the asset with the specified ID.
+    responses:
+      '200':
+        $ref: '../../components/responses/_index.yaml#/assetDetailResponse'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  put:
+    tags:
+      - Assets
+    summary: Update an asset
+    description: Update an existing asset with the provided details. Returns the updated asset.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/asset.yaml#/AssetInput'
+          example:
+            name: "Updated Product Launch Banner"
+            description: "Updated banner for the upcoming product launch"
+            status: "published"
+    responses:
+      '200':
+        $ref: '../../components/responses/_index.yaml#/assetUpdatedResponse'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  delete:
+    tags:
+      - Assets
+    summary: Delete an asset
+    description: Delete the asset with the specified ID. This action cannot be undone.
+    responses:
+      '204':
+        description: Asset deleted successfully
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+
+# Batch operations for assets
+/assets/batch:
+  post:
+    tags:
+      - Assets
+    summary: Create multiple assets
+    description: Create multiple assets in a single request. Limited to 100 assets per request.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              assets:
+                type: array
+                items:
+                  $ref: '../../components/schemas/asset.yaml#/AssetInput'
+                maxItems: 100
+                minItems: 1
+            required:
+              - assets
+          example:
+            assets:
+              - name: "Summer Banner 1"
+                type: "image"
+                status: "draft"
+              - name: "Summer Banner 2"
+                type: "image"
+                status: "draft"
+    responses:
+      '207':
+        description: Multi-status response with results for each asset
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      status:
+                        type: integer
+                        description: HTTP status code for this item
+                        example: 201
+                      data:
+                        $ref: '../../components/schemas/asset.yaml#/Asset'
+                        description: Created asset (if successful)
+                      error:
+                        type: object
+                        description: Error details (if failed)
+                        properties:
+                          code:
+                            type: string
+                            example: "VALIDATION_ERROR"
+                          message:
+                            type: string
+                            example: "Name is required"
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '413':
+        description: Request entity too large
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  patch:
+    tags:
+      - Assets
+    summary: Update multiple assets
+    description: Update multiple assets in a single request. Limited to 100 assets per request.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              updates:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                      description: ID of the asset to update
+                    data:
+                      $ref: '../../components/schemas/asset.yaml#/AssetInput'
+                  required:
+                    - id
+                    - data
+                maxItems: 100
+                minItems: 1
+            required:
+              - updates
+          example:
+            updates:
+              - id: "123e4567-e89b-12d3-a456-426614174000"
+                data:
+                  status: "published"
+              - id: "223e4567-e89b-12d3-a456-426614174001"
+                data:
+                  status: "archived"
+    responses:
+      '207':
+        description: Multi-status response with results for each update
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: ID of the asset
+                      status:
+                        type: integer
+                        description: HTTP status code for this update
+                        example: 200
+                      data:
+                        $ref: '../../components/schemas/asset.yaml#/Asset'
+                        description: Updated asset (if successful)
+                      error:
+                        type: object
+                        description: Error details (if failed)
+                        properties:
+                          code:
+                            type: string
+                            example: "NOT_FOUND"
+                          message:
+                            type: string
+                            example: "Asset not found"
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '413':
+        description: Request entity too large
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+
+  delete:
+    tags:
+      - Assets
+    summary: Delete multiple assets
+    description: Delete multiple assets in a single request. Limited to 100 asset IDs per request.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ids:
+                type: array
+                items:
+                  type: string
+                  format: uuid
+                maxItems: 100
+                minItems: 1
+            required:
+              - ids
+          example:
+            ids:
+              - "123e4567-e89b-12d3-a456-426614174000"
+              - "223e4567-e89b-12d3-a456-426614174001"
+    responses:
+      '207':
+        description: Multi-status response with results for each deletion
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                results:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                        description: ID of the asset
+                      status:
+                        type: integer
+                        description: HTTP status code for this deletion
+                        example: 204
+                      error:
+                        type: object
+                        description: Error details (if failed)
+                        properties:
+                          code:
+                            type: string
+                            example: "NOT_FOUND"
+                          message:
+                            type: string
+                            example: "Asset not found"
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '413':
+        description: Request entity too large
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'

@@ -1,0 +1,92 @@
+# Response for a single asset detail
+assetDetailResponse:
+  description: A single asset with full details
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Asset'
+      example:
+        data:
+          id: "123e4567-e89b-12d3-a456-426614174000"
+          name: "Summer Collection Banner"
+          description: "Main banner for the summer collection campaign"
+          type: "image"
+          fileUrl: "https://storage.assetmanagement.com/assets/123e4567-e89b-12d3-a456-426614174000.jpg"
+          fileSize: 1024000
+          mimeType: "image/jpeg"
+          status: "published"
+          tags:
+            - id: "550e8400-e29b-41d4-a716-446655440000"
+              name: "marketing"
+              description: "Assets used for marketing campaigns"
+              color: "#FF5733"
+              createdAt: "2023-01-01T12:00:00Z"
+              updatedAt: "2023-01-02T09:30:00Z"
+              createdBy: "550e8400-e29b-41d4-a716-446655440000"
+          metadata:
+            width: 1200
+            height: 630
+          createdAt: "2023-01-01T12:00:00Z"
+          updatedAt: "2023-01-02T09:30:00Z"
+          createdBy: "550e8400-e29b-41d4-a716-446655440000"
+
+# Response for asset creation
+assetCreatedResponse:
+  description: Asset created successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Asset'
+      example:
+        data:
+          id: "123e4567-e89b-12d3-a456-426614174000"
+          name: "New Product Launch Banner"
+          description: "Banner for the upcoming product launch"
+          type: "image"
+          status: "draft"
+          tags: []
+          metadata: {}
+          createdAt: "2023-01-01T12:00:00Z"
+          updatedAt: "2023-01-01T12:00:00Z"
+          createdBy: "550e8400-e29b-41d4-a716-446655440000"
+
+# Response for asset update
+assetUpdatedResponse:
+  description: Asset updated successfully
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            $ref: '#/components/schemas/Asset'
+      example:
+        data:
+          id: "123e4567-e89b-12d3-a456-426614174000"
+          name: "Updated Summer Collection Banner"
+          description: "Updated banner for the summer collection campaign"
+          type: "image"
+          fileUrl: "https://storage.assetmanagement.com/assets/123e4567-e89b-12d3-a456-426614174000.jpg"
+          fileSize: 1024000
+          mimeType: "image/jpeg"
+          status: "published"
+          tags:
+            - id: "550e8400-e29b-41d4-a716-446655440000"
+              name: "marketing"
+              description: "Assets used for marketing campaigns"
+              color: "#FF5733"
+              createdAt: "2023-01-01T12:00:00Z"
+              updatedAt: "2023-01-02T09:30:00Z"
+              createdBy: "550e8400-e29b-41d4-a716-446655440000"
+          metadata:
+            width: 1200
+            height: 630
+          createdAt: "2023-01-01T12:00:00Z"
+          updatedAt: "2023-01-03T15:45:00Z"
+          createdBy: "550e8400-e29b-41d4-a716-446655440000"

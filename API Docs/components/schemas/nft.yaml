@@ -1,0 +1,85 @@
+NFT:
+  type: object
+  required:
+    - id
+    - assetId
+    - tokenId
+    - contractAddress
+    - blockchain
+    - status
+    - createdAt
+  properties:
+    id:
+      type: string
+      format: uuid
+      description: Unique identifier for the NFT record
+      example: "550e8400-e29b-41d4-a716-446655440000"
+    assetId:
+      type: string
+      format: uuid
+      description: Reference to the original asset
+      example: "123e4567-e89b-12d3-a456-426614174000"
+    tokenId:
+      type: string
+      description: Unique token ID on the blockchain
+      example: "12345"
+    contractAddress:
+      type: string
+      description: Smart contract address of the NFT collection
+      example: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
+    blockchain:
+      type: string
+      enum: [ethereum, polygon, solana, flow, tezos]
+      description: Blockchain network where the NFT is minted
+      example: "ethereum"
+    metadataUrl:
+      type: string
+      format: uri
+      description: URL to the NFT metadata (usually IPFS)
+      example: "ipfs://QmXpY6uudpRmZfW1AxnxMk8k4vCxPVcEMhY7Jx2YFJ5rR2"
+    ownerAddress:
+      type: string
+      description: Current owner's wallet address
+      example: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+    status:
+      type: string
+      enum: [minting, minted, transferred, burned]
+      description: Current status of the NFT
+      example: "minted"
+    transactionHash:
+      type: string
+      description: Transaction hash of the minting/transfer transaction
+      example: "0x2ef9b7a0f8b78b0d308ce0c57cdcc4a8f327be5c534ff7eae7bb01c81a1597d9"
+    createdAt:
+      type: string
+      format: date-time
+      description: Timestamp when the NFT record was created
+      example: "2023-02-15T14:30:00Z"
+    updatedAt:
+      type: string
+      format: date-time
+      description: Timestamp when the NFT record was last updated
+      example: "2023-02-15T14:35:00Z"
+    createdBy:
+      type: string
+      format: uuid
+      description: ID of the user who created the NFT record
+      example: "550e8400-e29b-41d4-a716-446655440000"
+
+NFTInput:
+  type: object
+  required:
+    - assetId
+    - contractAddress
+    - blockchain
+  properties:
+    assetId:
+      $ref: "#/components/schemas/NFT/properties/assetId"
+    contractAddress:
+      $ref: "#/components/schemas/NFT/properties/contractAddress"
+    blockchain:
+      $ref: "#/components/schemas/NFT/properties/blockchain"
+    metadataUrl:
+      $ref: "#/components/schemas/NFT/properties/metadataUrl"
+    ownerAddress:
+      $ref: "#/components/schemas/NFT/properties/ownerAddress"

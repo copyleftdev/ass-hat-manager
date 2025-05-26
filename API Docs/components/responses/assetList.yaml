@@ -1,0 +1,80 @@
+# Response for listing assets
+assetListResponse:
+  description: A paginated list of assets
+  content:
+    application/json:
+      schema:
+        type: object
+        properties:
+          data:
+            type: array
+            items:
+              $ref: '#/components/schemas/Asset'
+          pagination:
+            type: object
+            properties:
+              total:
+                type: integer
+                description: Total number of items available
+                example: 100
+              page:
+                type: integer
+                description: Current page number
+                example: 1
+              limit:
+                type: integer
+                description: Number of items per page
+                example: 20
+              totalPages:
+                type: integer
+                description: Total number of pages
+                example: 5
+          links:
+            type: object
+            properties:
+              self:
+                type: string
+                format: uri
+                description: Link to the current page
+                example: "/assets?page=1&limit=20"
+              next:
+                type: string
+                format: uri
+                nullable: true
+                description: Link to the next page (if exists)
+                example: "/assets?page=2&limit=20"
+              prev:
+                type: string
+                format: uri
+                nullable: true
+                description: Link to the previous page (if exists)
+                example: null
+      example:
+        data:
+          - id: "123e4567-e89b-12d3-a456-426614174000"
+            name: "Summer Collection Banner"
+            description: "Main banner for the summer collection campaign"
+            type: "image"
+            fileUrl: "https://storage.assetmanagement.com/assets/123e4567-e89b-12d3-a456-426614174000.jpg"
+            fileSize: 1024000
+            mimeType: "image/jpeg"
+            status: "published"
+            tags:
+              - id: "550e8400-e29b-41d4-a716-446655440000"
+                name: "marketing"
+                color: "#FF5733"
+            metadata:
+              width: 1200
+              height: 630
+            createdAt: "2023-01-01T12:00:00Z"
+            updatedAt: "2023-01-02T09:30:00Z"
+            createdBy: "550e8400-e29b-41d4-a716-446655440000"
+        pagination:
+          total: 100
+          page: 1
+          limit: 20
+          totalPages: 5
+        links:
+          self: "/assets?page=1&limit=20"
+          next: "/assets?page=2&limit=20"
+          prev: null

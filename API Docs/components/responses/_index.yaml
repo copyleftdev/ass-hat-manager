@@ -1,0 +1,30 @@
+# Responses Index
+# This file references all response definitions for the API
+
+# Error responses
+errorResponse:
+  $ref: './errorResponses.yaml#/errorResponse'
+badRequest:
+  $ref: './errorResponses.yaml#/badRequest'
+unauthorized:
+  $ref: './errorResponses.yaml#/unauthorized'
+forbidden:
+  $ref: './errorResponses.yaml#/forbidden'
+notFound:
+  $ref: './errorResponses.yaml#/notFound'
+conflict:
+  $ref: './errorResponses.yaml#/conflict'
+tooManyRequests:
+  $ref: './errorResponses.yaml#/tooManyRequests'
+serverError:
+  $ref: './errorResponses.yaml#/serverError'
+
+# Asset responses
+assetListResponse:
+  $ref: './assetList.yaml#/assetListResponse'
+assetDetailResponse:
+  $ref: './assetDetail.yaml#/assetDetailResponse'
+assetCreatedResponse:
+  $ref: './assetDetail.yaml#/assetCreatedResponse'
+assetUpdatedResponse:
+  $ref: './assetDetail.yaml#/assetUpdatedResponse'

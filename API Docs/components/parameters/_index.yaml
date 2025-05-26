@@ -1,0 +1,18 @@
+# Parameters Index
+# This file references all parameter definitions for the API
+
+# Common parameters
+assetIdPath:
+  $ref: './assetId.yaml#/assetIdPath'
+assetIdQuery:
+  $ref: './assetId.yaml#/assetIdQuery'
+
+# Pagination parameters
+page:
+  $ref: './pagination.yaml#/page'
+limit:
+  $ref: './pagination.yaml#/limit'
+sort:
+  $ref: './pagination.yaml#/sort'
+fields:
+  $ref: './pagination.yaml#/fields'

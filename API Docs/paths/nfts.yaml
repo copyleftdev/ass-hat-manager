@@ -1,0 +1,200 @@
+# NFTs API Paths
+
+# List all NFTs
+/nfts:
+  get:
+    tags:
+      - NFTs
+    summary: List all NFTs
+    description: Returns a paginated list of NFTs. You can filter, sort, and paginate the results.
+    parameters:
+      - $ref: '../../components/parameters/_index.yaml#/page'
+      - $ref: '../../components/parameters/_index.yaml#/limit'
+      - $ref: '../../components/parameters/_index.yaml#/sort'
+      - $ref: '../../components/parameters/_index.yaml#/fields'
+      - name: assetId
+        in: query
+        description: Filter NFTs by asset ID
+        required: false
+        schema:
+          type: string
+          format: uuid
+        example: "123e4567-e89b-12d3-a456-426614174000"
+      - name: status
+        in: query
+        description: Filter NFTs by status
+        required: false
+        schema:
+          type: string
+          enum: [minting, minted, transferred, burned]
+        example: "minted"
+      - name: blockchain
+        in: query
+        description: Filter NFTs by blockchain
+        required: false
+        schema:
+          type: string
+          enum: [ethereum, polygon, solana, flow, tezos]
+        example: "ethereum"
+      - name: ownerAddress
+        in: query
+        description: Filter NFTs by owner's wallet address
+        required: false
+        schema:
+          type: string
+        example: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+    responses:
+      '200':
+        description: A paginated list of NFTs
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: array
+                  items:
+                    $ref: '../../components/schemas/nft.yaml#/NFT'
+                pagination:
+                  $ref: '#/components/schemas/Pagination'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  post:
+    tags:
+      - NFTs
+    summary: Create a new NFT record
+    description: Create a new NFT record with the provided details. This does not mint the NFT on the blockchain.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/nft.yaml#/NFTInput'
+          example:
+            assetId: "123e4567-e89b-12d3-a456-426614174000"
+            contractAddress: "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d"
+            blockchain: "ethereum"
+            metadataUrl: "ipfs://QmXpY6uudpRmZfW1AxnxMk8k4vCxPVcEMhY7Jx2YFJ5rR2"
+            ownerAddress: "0x71C7656EC7ab88b098defB751B7401B5f6d8976F"
+    responses:
+      '201':
+        description: NFT record created successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/nft.yaml#/NFT'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+
+# Operations on a specific NFT
+/nfts/{nftId}:
+  parameters:
+    - name: nftId
+      in: path
+      required: true
+      description: Unique identifier of the NFT
+      schema:
+        type: string
+        format: uuid
+      example: "550e8400-e29b-41d4-a716-446655440000"
+  
+  get:
+    tags:
+      - NFTs
+    summary: Get NFT by ID
+    description: Returns the NFT with the specified ID.
+    responses:
+      '200':
+        description: NFT details
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/nft.yaml#/NFT'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  put:
+    tags:
+      - NFTs
+    summary: Update an NFT record
+    description: Update an existing NFT record with the provided details. This does not update the NFT on the blockchain.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '../../components/schemas/nft.yaml#/NFTInput'
+          example:
+            status: "transferred"
+            ownerAddress: "0x742d35Cc6634C0532925a3b844Bc454e4438f44e"
+            transactionHash: "0x2ef9b7a0f8b78b0d308ce0c57cdcc4a8f327be5c534ff7eae7bb01c81a1597d9"
+    responses:
+      '200':
+        description: NFT record updated successfully
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: '../../components/schemas/nft.yaml#/NFT'
+      '400':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '409':
+        $ref: '../../components/responses/_index.yaml#/conflict'
+      '422':
+        $ref: '../../components/responses/_index.yaml#/badRequest'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'
+  
+  delete:
+    tags:
+      - NFTs
+    summary: Delete an NFT record
+    description: Delete the NFT record with the specified ID. This does not affect the NFT on the blockchain.
+    responses:
+      '204':
+        description: NFT record deleted successfully
+      '401':
+        $ref: '../../components/responses/_index.yaml#/unauthorized'
+      '403':
+        $ref: '../../components/responses/_index.yaml#/forbidden'
+      '404':
+        $ref: '../../components/responses/_index.yaml#/notFound'
+      '500':
+        $ref: '../../components/responses/_index.yaml#/serverError'

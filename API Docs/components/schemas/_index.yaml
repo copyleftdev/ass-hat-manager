@@ -1,0 +1,26 @@
+# Schemas Index
+# This file references all schema definitions for the API
+
+# Asset related schemas
+Asset:
+  $ref: './asset.yaml#/Asset'
+AssetInput:
+  $ref: './asset.yaml#/AssetInput'
+
+# Tag related schemas
+Tag:
+  $ref: './tag.yaml#/Tag'
+TagInput:
+  $ref: './tag.yaml#/TagInput'
+
+# Release related schemas
+Release:
+  $ref: './release.yaml#/Release'
+ReleaseInput:
+  $ref: './release.yaml#/ReleaseInput'
+
+# NFT related schemas
+NFT:
+  $ref: './nft.yaml#/NFT'
+NFTInput:
+  $ref: './nft.yaml#/NFTInput'
