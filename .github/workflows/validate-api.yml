@@ -24,17 +24,19 @@ jobs:
       working-directory: ./api-test-harness
       run: |
         npm ci
+        npm install @redocly/cli mocha mochawesome --save-dev
         npm list
       
-    - name: Validate OpenAPI specification
-      run: npx @redocly/cli lint "API Docs/openapi.yaml"
+    - name: Run OpenAPI validation
       working-directory: .
+      run: npx @redocly/cli lint "API Docs/openapi.yaml"
       
     - name: Run API validation tests
       working-directory: ./api-test-harness
       env:
         NODE_ENV: test
       run: |
+        mkdir -p test-results
         npx mocha test/validation/*.test.js --reporter mochawesome --reporter-options reportDir=test-results,reportFilename=test-results
         
     - name: Upload test results
