@@ -17,11 +17,29 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: '20.x'
+        cache: 'npm'
         
     - name: Install dependencies
       working-directory: ./api-test-harness
       run: npm ci
       
+    - name: Validate OpenAPI specification
+      run: |
+        npx @redocly/cli lint "API Docs/openapi.yaml"
+      working-directory: ./
+      
     - name: Run API validation tests
       working-directory: ./api-test-harness
-      run: npx mocha test/validation/*.test.js
+      env:
+        NODE_ENV: test
+      run: |
+        npx mocha test/validation/*.test.js --reporter mochawesome --reporter-options reportDir=test-results,reportFilename=test-results
+        
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: |
+          api-test-harness/test-results/
+        retention-days: 7
