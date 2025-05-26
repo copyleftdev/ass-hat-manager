@@ -24,9 +24,8 @@ jobs:
       run: npm ci
       
     - name: Validate OpenAPI specification
-      run: |
-        npx @redocly/cli lint "API Docs/openapi.yaml"
-      working-directory: ./
+      run: npx @redocly/cli lint "API Docs/openapi.yaml"
+      working-directory: .
       
     - name: Run API validation tests
       working-directory: ./api-test-harness
