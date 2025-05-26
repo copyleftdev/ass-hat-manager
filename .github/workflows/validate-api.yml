@@ -18,12 +18,17 @@ jobs:
       with:
         node-version: '20.x'
         cache: 'npm'
-        cache-dependency-path: 'api-test-harness/package-lock.json'
         
     - name: Install dependencies
       working-directory: ./api-test-harness
       run: |
-        npm ci
+        # Install dependencies with or without package-lock.json
+        if [ -f package-lock.json ]; then
+          npm ci
+        else
+          npm install
+        fi
+        # Install additional required packages
         npm install @redocly/cli mocha mochawesome --save-dev
         npm list
       
